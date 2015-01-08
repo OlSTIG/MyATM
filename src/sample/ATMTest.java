@@ -2,8 +2,9 @@ package sample;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.hamcrest.*;
 import static org.mockito.Mockito.*;
+import org.mockito.InOrder;
+import java.util.List;
 
 public class ATMTest {
 
@@ -22,6 +23,14 @@ public class ATMTest {
         System.out.println("Get Money In ATM When ATM Is Empty");
         ATM atm = new ATM(0);
         double expResult = 0;
+        double result = atm.getMoneyInATM();
+        assertEquals(expResult, result, 0.0);
+    }
+    @Test
+    public void testNoToAmount() {
+        System.out.println("Default ATM Amount money");
+        ATM atm = new ATM();
+        double expResult = 10000;
         double result = atm.getMoneyInATM();
         assertEquals(expResult, result, 0.0);
     }
@@ -218,10 +227,12 @@ public class ATMTest {
         atm.Push_in_card(mockedcard);
         boolean t = atm.validateCard(mockedcard,1234);
         double result = atm.getCash(amount,1234);
-        //InOrder inOrder = inOrder(mockedcard, cardaccount);
-        //inOrder.verify(mockedcard).getAccount();
-        //inOrder.verify(cardaccount).getBalance();
-        //inOrder.verify(cardaccount).withdrow(1000);
+
+       // InOrder inOrder = inOrder(mockedcard, cardaccount);
+        verify(mockedcard, times(3)).getAccount();
+
+        verify(cardaccount,times(2)).getBalance();
+        verify(cardaccount).withdrow(1000);
     }
 
     @Test
